@@ -7,4 +7,7 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  root 'welcome#index'
+  get '/register', to: 'users#new'
 end
