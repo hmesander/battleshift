@@ -40,8 +40,8 @@ describe 'Guest user' do
       fill_in 'user[password_confirmation]', with: password
       click_on 'Submit'
 
-      rack_test_session_wrapper = Capybara.current_session.driver
-      rack_test_session_wrapper.submit :patch, "/activate/#{User.last.id}", nil
+      test_session = Capybara.current_session.driver
+      test_session.submit :patch, "/activate/#{User.last.id}", nil
 
       expect(current_path).to eq(dashboard_path)
       expect(page).to have_content('Thank you! Your account is now activated.')

@@ -21,6 +21,7 @@ group :development, :test do
   gem 'capybara'
   gem 'pry'
   gem 'faker'
+  gem 'shoulda-matchers'
 end
 
 group :test do
