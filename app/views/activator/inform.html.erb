@@ -1,3 +1,3 @@
-<%= link_to "Visit here to activate your account", activate_url(@user.token) %>
+<%= link_to "Visit here to activate your account", activate_url(@user.token), only_path: true %>
 
 API Key: <%= @user.token %>
