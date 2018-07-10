@@ -17,7 +17,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    user = User.find(params[:id])
+    user = User.find_by(token: params[:token])
     user.active!
     if current_user.active?
       flash[:success] = 'Thank you! Your account is now activated.'

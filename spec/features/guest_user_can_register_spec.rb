@@ -41,7 +41,7 @@ describe 'Guest user' do
       click_on 'Submit'
 
       test_session = Capybara.current_session.driver
-      test_session.submit :post, "/activate/#{User.last.id}", nil
+      test_session.submit :get, "/activate/#{User.last.token}", nil
 
       expect(current_path).to eq(dashboard_path)
       expect(page).to have_content('Thank you! Your account is now activated.')
