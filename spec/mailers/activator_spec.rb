@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Activator, type: :mailer do
   describe '#inform(user)' do
     let(:user) { create(:user) }
-    let(:mail) { described_class.inform(user).deliver_now }
+    let(:mail) { described_class.inform(user, 'localhost:3000').deliver_now }
 
     it 'renders the subject' do
       expect(mail.subject).to eq('Activate Account')

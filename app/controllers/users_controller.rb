@@ -8,7 +8,7 @@ class UsersController < ApplicationController
     user.create_token
     if user.save
       session[:user_id] = user.id
-      Activator.inform(current_user).deliver_now
+      Activator.inform(current_user, request.base_url).deliver_now
       redirect_to dashboard_path(current_user)
     else
       flash[:error] = 'Registration unsuccessful. Try again.'

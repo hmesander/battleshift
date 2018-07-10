@@ -4,10 +4,6 @@ class User < ApplicationRecord
   validates_uniqueness_of :email_address, :token
   enum status: [:inactive, :active]
 
-  def send_instructions
-    Activator.inform(self).deliver_now
-  end
-
   def create_token
     self[:token] = SecureRandom.urlsafe_base64
   end

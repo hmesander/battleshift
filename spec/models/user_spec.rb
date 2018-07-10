@@ -14,7 +14,7 @@ describe User, type: :model do
     subject { create(:user) }
 
     it 'sends an email' do
-      expect { subject.send_instructions }
+      expect { Activator.inform(subject,'localhost:3000').deliver_now }
       .to change { ActionMailer::Base.deliveries.count }.by(1)
     end
   end
