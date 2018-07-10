@@ -11,6 +11,6 @@ Rails.application.routes.draw do
   root 'welcome#index'
   get 'register', to: 'users#new'
   get 'dashboard', to: 'dashboard#show', format: false
-  post '/activate/:id', to: 'users#update'
+  post '/activate/:id', to: 'users#update', as: 'activate'
   resources :users, only: [:index, :create]
 end

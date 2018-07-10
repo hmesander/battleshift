@@ -23,7 +23,6 @@ class UsersController < ApplicationController
       flash[:success] = 'Thank you! Your account is now activated.'
       redirect_to dashboard_path
     end
-    redirect_to dashboard_path
   end
 
   private
