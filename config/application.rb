@@ -30,6 +30,8 @@ module BattleshipWeb
       enable_starttls_auto: true
     }
 
+    config.action_mailer.default_url_options = { :host => 'https://ancient-reaches-55088.herokuapp.com' }
+
     config.load_defaults 5.1
     config.before_initialize do |app|
       app.config.paths.add 'app/services/values', :eager_load => true
@@ -46,5 +48,6 @@ module BattleshipWeb
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+    config.assets.initialize_on_precompile = false
   end
 end
