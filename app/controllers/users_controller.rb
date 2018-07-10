@@ -5,6 +5,7 @@ class UsersController < ApplicationController
 
   def create
     user = User.new(user_params)
+    user.create_token
     if user.save
       session[:user_id] = user.id
       Activator.inform(current_user).deliver_now
@@ -20,13 +21,14 @@ class UsersController < ApplicationController
     user.active!
     if current_user.active?
       flash[:success] = 'Thank you! Your account is now activated.'
-      redirect_to dashboard_path
+      # redirect_to dashboard_path
     end
+    redirect_to dashboard_path
   end
 
   private
 
   def user_params
-    params.require(:user).permit(:email_address, :name, :password, :id)
+    params.require(:user).permit(:email_address, :name, :password)
   end
 end
