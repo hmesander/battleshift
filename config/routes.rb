@@ -7,4 +7,10 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  root 'welcome#index'
+  get 'register', to: 'users#new'
+  get 'dashboard', to: 'dashboard#show', format: false
+  patch 'activate/:id', to: 'users#update'
+  resources :users, only: [:index, :create]
 end
