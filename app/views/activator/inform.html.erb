@@ -1,2 +1,3 @@
-<%= link_to "Visit here to activate your account", "https://ancient-reaches-55088.herokuapp.com/activate/#{@user.id}", method: 'patch' %>
+<%= link_to "Visit here to activate your account", "/activate", method: :post %>
+
 API Key: <%= @user.token %>
