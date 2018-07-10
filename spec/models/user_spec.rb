@@ -6,6 +6,8 @@ describe User, type: :model do
     it { should validate_presence_of(:email_address) }
     it { should validate_presence_of(:password) }
     it { should validate_uniqueness_of(:email_address) }
+    it { should validate_presence_of(:token) }
+    it { should validate_uniqueness_of(:token) }
   end
 
   describe 'Instance methods' do
