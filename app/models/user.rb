@@ -7,4 +7,8 @@ class User < ApplicationRecord
   def send_instructions
     Activator.inform(self).deliver_now
   end
+
+  def create_token
+    self[:token] = SecureRandom.urlsafe_base64
+  end
 end
