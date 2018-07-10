@@ -21,7 +21,7 @@ class UsersController < ApplicationController
     user.active!
     if current_user.active?
       flash[:success] = 'Thank you! Your account is now activated.'
-      # redirect_to dashboard_path
+      redirect_to dashboard_path
     end
     redirect_to dashboard_path
   end
