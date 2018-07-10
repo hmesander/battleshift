@@ -16,5 +16,9 @@ describe Activator, type: :mailer do
     it 'renders the sender email' do
       expect(mail.from).to eq(['noreply@battleshift.com'])
     end
+
+    it 'renders the user API token' do
+      expect(mail.body).to include("API Key: #{user.token}")
+    end
   end
 end
