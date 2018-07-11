@@ -1,0 +1,15 @@
+<nav>
+  <section class='thumbnail'>
+    <a href="/">
+      <img class='battleship' alt="">
+    </a>
+  </section>
+  <section class='login'>
+    <% if current_user.nil? %>
+      <%= link_to 'Log in', login_path %>
+    <% else %>
+      <%= link_to current_user.name, dashboard_path %>
+      <%= link_to 'Logout', logout_path, method: :delete %>
+    <% end %>
+  </section>
+</nav>

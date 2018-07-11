@@ -9,6 +9,7 @@
   </head>
 
   <body>
+    <%= render partial: "partials/nav" %>
     <% flash.each do |name, msg| %>
       <%= content_tag :div, msg, class: name %>
     <% end %>
