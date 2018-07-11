@@ -9,6 +9,9 @@ Rails.application.routes.draw do
   end
 
   root 'welcome#index'
+  get '/login', to: 'sessions#new'
+  post '/login', to: 'sessions#create'
+  delete '/logout', to: 'sessions#destroy'
   get 'register', to: 'users#new'
   get 'dashboard', to: 'dashboard#show', format: false
   get '/activate/:token', to: 'users#update', as: 'activate'
