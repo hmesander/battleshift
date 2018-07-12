@@ -7,9 +7,10 @@ describe 'POST /api/v1/games/:id/ships' do
       UserGame.create(user_id: player_1.id, game_id: game.id)
       UserGame.create(user_id: player_2.id, game_id: game.id)
 
-      headers = { ship_size: 3, start_space: "A1", end_space: "A3", 'X-API-Key' => player_1.token, 'ACCEPT' => 'application/json' }
+      headers = { 'X-API-Key' => player_1.token, 'ACCEPT' => 'application/json' }
+      body = { 'ship_size' => 3, 'start_space' => "A1", 'end_space' => "A3" }
 
-      post "/api/v1/games/#{game.id}/ships", headers: headers
+      post "/api/v1/games/#{game.id}/ships", headers: headers, params: body
 
       actual = JSON.parse(response.body, symbolize_names: true)
       expected = Game.last
@@ -19,6 +20,18 @@ describe 'POST /api/v1/games/:id/ships' do
       expect(actual[:message]).to eq('Successfully placed ship with a size of 3. You have 1 ship(s) to place with a size of 2.')
       expect(actual[:player_1_board][:rows].count).to eq(4)
       expect(actual[:player_2_board][:rows].count).to eq(4)
+
+      headers = { 'X-API-Key' => player_1.token, 'ACCEPT' => 'application/json' }
+      body = { 'ship_size' => 2, 'start_space' => "D4", 'end_space' => "E4" }
+
+      post "/api/v1/games/#{game.id}/ships", headers: headers, params: body
+
+      actual = JSON.parse(response.body, symbolize_names: true)
+      expected = Game.last
+
+      expect(response).to be_success
+      expect(actual[:id]).to eq(expected.id)
+      expect(actual[:message]).to eq('Successfully placed ship with a size of 2. You have 0 ship(s) to place.')
     end
   end
 end

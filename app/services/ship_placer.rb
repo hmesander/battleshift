@@ -1,9 +1,11 @@
 class ShipPlacer
+  attr_reader :message
   def initialize(board:, ship:, start_space:, end_space:)
     @board       = board
     @ship        = ship
     @start_space = start_space
     @end_space   = end_space
+    @message     = nil
   end
 
   def run
@@ -24,10 +26,21 @@ class ShipPlacer
     def place_ship(row, column)
       coordinates = "#{row}#{column}"
       space = board.locate_space(coordinates)
-      if space.occupied?
-        raise InvalidShipPlacement.new("Attempting to place ship in a space that is already occupied.")
-      else
-        space.occupy!(ship)
+      if space.class != Array
+        if space.occupied?
+          raise InvalidShipPlacement.new("Attempting to place ship in a space that is already occupied.")
+        else
+          space.occupy!(ship)
+          if @ship.length == 3 && (board.ship_count < 2)
+            @message = "Successfully placed ship with a size of #{@ship.length}. You have #{2 - board.ship_count} ship(s) to place with a size of 2."
+          elsif @ship.length == 2 && (board.ship_count < 2)
+            @message = "Successfully placed ship with a size of #{@ship.length}. You have #{2 - board.ship_count} ship(s) to place with a size of 3."
+          elsif board.ship_count >= 2
+            @message = "Successfully placed ship with a size of #{@ship.length}. You have 0 ship(s) to place."
+          else
+            raise InvalidShipPlacement.new("Attempting to place ship that is not 2 or 3 spaces long.")
+          end
+        end
       end
     end
 
@@ -49,7 +62,7 @@ class ShipPlacer
 
   def place_in_column
     column = start_space[1]
-    range   = start_space[0]..end_space[0]
+    range  = start_space[0]..end_space[0]
     raise InvalidShipPlacement unless range.count == ship.length
     range.each { |row| place_ship(row, column) }
   end
