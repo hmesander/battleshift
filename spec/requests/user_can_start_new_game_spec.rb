@@ -18,9 +18,9 @@ describe 'POST /api/v1/games' do
       game.user_games.create!(user_id: player_1.id)
       game.user_games.create!(user_id: player_2.id)
 
-      params = "player_1_api_key=#{player_1.token}&&player_2_email=#{player_2.email_address}"
+      headers = { 'X-API-Key' => player_1.token, 'ACCEPT' => 'application/json' }
 
-      post "/api/v1/games?#{params}"
+      post "/api/v1/games?opponent_email=#{player_2.email_address}", headers: headers
 
       actual = JSON.parse(response.body, symbolize_names: true)
       expected = Game.last
@@ -28,8 +28,8 @@ describe 'POST /api/v1/games' do
       expect(response).to be_success
       expect(actual[:id]).to eq(expected.id)
       expect(actual[:current_turn]).to eq(expected.current_turn)
-      expect(actual[:player_1_board][:rows].count).to eq(5)
-      expect(actual[:player_2_board][:rows].count).to eq(5)
+      expect(actual[:player_1_board][:rows].count).to eq(4)
+      expect(actual[:player_2_board][:rows].count).to eq(4)
       expect(actual[:player_1_board][:rows][0][:name]).to eq("row_a")
       expect(actual[:player_1_board][:rows][3][:data][0][:coordinates]).to eq("D1")
       expect(actual[:player_1_board][:rows][3][:data][0][:coordinates]).to eq("D1")
