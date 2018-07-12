@@ -10,6 +10,10 @@ describe User, type: :model do
     it { should validate_uniqueness_of(:token) }
   end
 
+  describe 'Relationships' do
+    it { should have_many(:games) }
+  end
+
   describe 'Instance methods' do
     subject { create(:user) }
 
