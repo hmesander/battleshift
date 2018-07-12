@@ -1,11 +1,15 @@
 describe 'POST /api/v1/games/:id/ships' do
   describe 'registered user sends ship info' do
     it 'returns a game with boards and placed ship information' do
+      player_1 = create(:user, status: 'active')
+      player_2 = create(:user, status: 'active', email_address: 'blub@email.com', token: 'efh387do8s72_nij3')
       game = create(:game, player_1_board: Board.new(4), player_2_board: Board.new(4))
+      UserGame.create(user_id: player_1.id, game_id: game.id)
+      UserGame.create(user_id: player_2.id, game_id: game.id)
 
-      header_body = { ship_size: 3, start_space: "A1", end_space: "A3" }
+      headers = { ship_size: 3, start_space: "A1", end_space: "A3", 'X-API-Key' => player_1.token, 'ACCEPT' => 'application/json' }
 
-      post "/api/v1/games/#{game.id}/ships", headers: header_body
+      post "/api/v1/games/#{game.id}/ships", headers: headers
 
       actual = JSON.parse(response.body, symbolize_names: true)
       expected = Game.last

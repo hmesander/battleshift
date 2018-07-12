@@ -16,9 +16,20 @@ class ShipPlacer
     end
   end
 
+
   private
   attr_reader :board, :ship,
     :start_space, :end_space
+
+    def place_ship(row, column)
+      coordinates = "#{row}#{column}"
+      space = board.locate_space(coordinates)
+      if space.occupied?
+        raise InvalidShipPlacement.new("Attempting to place ship in a space that is already occupied.")
+      else
+        space.occupy!(ship)
+      end
+    end
 
   def same_row?
     start_space[0] == end_space[0]
@@ -43,15 +54,6 @@ class ShipPlacer
     range.each { |row| place_ship(row, column) }
   end
 
-  def place_ship(row, column)
-    coordinates = "#{row}#{column}"
-    space = board.locate_space(coordinates)
-    if space.occupied?
-      raise InvalidShipPlacement.new("Attempting to place ship in a space that is already occupied.")
-    else
-      space.occupy!(ship)
-    end
-  end
 end
 
 class InvalidShipPlacement < StandardError
