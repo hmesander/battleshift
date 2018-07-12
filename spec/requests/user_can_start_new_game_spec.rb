@@ -25,13 +25,11 @@ describe 'POST /api/v1/games' do
       actual = JSON.parse(response.body, symbolize_names: true)
       expected = Game.last
 
-      binding.pry
-
       expect(response).to be_success
       expect(actual[:id]).to eq(expected.id)
       expect(actual[:current_turn]).to eq(expected.current_turn)
-      expect(actual[:player_1_board][:rows].count).to eq(4)
-      expect(actual[:player_2_board][:rows].count).to eq(4)
+      expect(actual[:player_1_board][:rows].count).to eq(5)
+      expect(actual[:player_2_board][:rows].count).to eq(5)
       expect(actual[:player_1_board][:rows][0][:name]).to eq("row_a")
       expect(actual[:player_1_board][:rows][3][:data][0][:coordinates]).to eq("D1")
       expect(actual[:player_1_board][:rows][3][:data][0][:coordinates]).to eq("D1")
