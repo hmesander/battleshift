@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       post "/games", to: "games#create"
       resources :games, only: [:show] do
         post "/shots", to: "games/shots#create"
+        post "/ships", to: "games/ships#update"
       end
     end
   end
