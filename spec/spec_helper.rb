@@ -14,28 +14,30 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 require 'byebug'
+require 'rails_helper'
+require 'database_cleaner'
 
 RSpec.configure do |config|
 
   config.before(:suite) do
-   DatabaseCleaner.clean_with(:truncation)
- end
+    DatabaseCleaner.clean_with(:truncation)
+  end
 
- config.before(:each) do
-   DatabaseCleaner.strategy = :transaction
- end
+  config.before(:each) do
+    DatabaseCleaner.strategy = :transaction
+  end
 
- config.before(:each, :js => true) do
-   DatabaseCleaner.strategy = :truncation
- end
+  config.before(:each, :js => true) do
+    DatabaseCleaner.strategy = :truncation
+  end
 
- config.before(:each) do
-   DatabaseCleaner.start
- end
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
 
- config.after(:each) do
-   DatabaseCleaner.clean
- end
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
 
   config.expect_with :rspec do |expectations|
     # This option will default to `true` in RSpec 4. It makes the `description`
