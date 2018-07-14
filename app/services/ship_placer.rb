@@ -31,11 +31,10 @@ class ShipPlacer
           raise InvalidShipPlacement.new("Attempting to place ship in a space that is already occupied.")
         else
           space.occupy!(ship)
-          if @ship.length == 3 && (board.ship_count < 2)
-            @message = "Successfully placed ship with a size of #{@ship.length}. You have #{2 - board.ship_count} ship(s) to place with a size of 2."
-          elsif @ship.length == 2 && (board.ship_count < 2)
-            @message = "Successfully placed ship with a size of #{@ship.length}. You have #{2 - board.ship_count} ship(s) to place with a size of 3."
-          elsif board.ship_count >= 2
+          @board.ships_not_placed.delete(@ship.length)
+          if @board.ships_not_placed.count > 0
+            @message = "Successfully placed ship with a size of #{@ship.length}. You have #{@board.ships_not_placed.count} ship(s) to place with a size of #{@board.ships_not_placed[0]}."
+          elsif @board.ships_not_placed.count == 0
             @message = "Successfully placed ship with a size of #{@ship.length}. You have 0 ship(s) to place."
           else
             raise InvalidShipPlacement.new("Attempting to place ship that is not 2 or 3 spaces long.")
