@@ -22,7 +22,7 @@ describe 'POST /api/v1/games/:id/ships' do
       expect(actual[:player_2_board][:rows].count).to eq(4)
 
       headers = { 'X-API-Key' => player_1.token, 'ACCEPT' => 'application/json' }
-      body = { 'ship_size' => 2, 'start_space' => "D4", 'end_space' => "E4" }
+      body = { 'ship_size' => 2, 'start_space' => "C1", 'end_space' => "C2" }
 
       post "/api/v1/games/#{game.id}/ships", headers: headers, params: body
 

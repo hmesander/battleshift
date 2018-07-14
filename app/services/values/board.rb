@@ -1,9 +1,7 @@
 class Board
 
-  attr_reader :length,
-              :board
-
-  attr_accessor :ships_not_placed
+  attr_reader :length
+  attr_accessor :ships_not_placed, :board
 
   def initialize(length)
     @length           = length
