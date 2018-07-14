@@ -9,24 +9,48 @@ describe 'POST /api/v1/games/:id/shots' do
       UserGame.create(user_id: player_1.id, game_id: game.id)
       UserGame.create(user_id: player_2.id, game_id: game.id)
 
-      headers = { 'X-API-Key' => player_1.token, 'ACCEPT' => 'application/json' }
-      body = { 'ship_size' => 3, 'start_space' => "A1", 'end_space' => "A3" }
-      post "/api/v1/games/#{game.id}/ships", headers: headers, params: body
+      sm_ship = Ship.new(2)
+      lg_ship = Ship.new(3)
 
-      headers = { 'X-API-Key' => player_1.token, 'ACCEPT' => 'application/json' }
-      body = { 'ship_size' => 2, 'start_space' => "C1", 'end_space' => "D1" }
-      post "/api/v1/games/#{game.id}/ships", headers: headers, params: body
+      ShipPlacer.new(board: game.player_1_board,
+                     ship: sm_ship,
+                     start_space: "A1",
+                     end_space: "A2").run
+      ShipPlacer.new(board: game.player_1_board,
+                     ship: lg_ship,
+                     start_space: "C1",
+                     end_space: "C3").run
+      ShipPlacer.new(board: game.player_2_board,
+                     ship: sm_ship,
+                     start_space: "A1",
+                     end_space: "A2").run
+      ShipPlacer.new(board: game.player_2_board,
+                     ship: lg_ship,
+                     start_space: "C1",
+                     end_space: "C3").run
 
-      headers = { 'X-API-Key' => player_2.token, 'ACCEPT' => 'application/json' }
-      body = { 'ship_size' => 3, 'start_space' => "A1", 'end_space' => "A3" }
-      post "/api/v1/games/#{game.id}/ships", headers: headers, params: body
+      game.save
 
-      headers = { 'X-API-Key' => player_2.token, 'ACCEPT' => 'application/json' }
-      body = { 'ship_size' => 2, 'start_space' => "C1", 'end_space' => "D1" }
-      post "/api/v1/games/#{game.id}/ships", headers: headers, params: body
+      # headers = { 'X-API-Key' => player_1.token, 'ACCEPT' => 'application/json' }
+      # body = { 'ship_size' => 3, 'start_space' => "A1", 'end_space' => "A3" }
+      #
+      # post "/api/v1/games/#{game.id}/ships", headers: headers, params: body
+      #
+      # headers = { 'X-API-Key' => player_1.token, 'ACCEPT' => 'application/json' }
+      # body = { 'ship_size' => 2, 'start_space' => "C1", 'end_space' => "D1" }
+      # post "/api/v1/games/#{game.id}/ships", headers: headers, params: body
+      #
+      # headers = { 'X-API-Key' => player_2.token, 'ACCEPT' => 'application/json' }
+      # body = { 'ship_size' => 3, 'start_space' => "A1", 'end_space' => "A3" }
+      # post "/api/v1/games/#{game.id}/ships", headers: headers, params: body
+      #
+      # headers = { 'X-API-Key' => player_2.token, 'ACCEPT' => 'application/json' }
+      # body = { 'ship_size' => 2, 'start_space' => "C1", 'end_space' => "D1" }
+      # post "/api/v1/games/#{game.id}/ships", headers: headers, params: body
 
       headers = { 'X-API-Key' => player_1.token, 'ACCEPT' => 'application/json' }
       body = { 'target' => 'A1' }
+
       post "/api/v1/games/#{game.id}/shots", headers: headers, params: body
 
       actual = JSON.parse(response.body, symbolize_names: true)
