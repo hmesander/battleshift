@@ -2,9 +2,10 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   namespace :api do
     namespace :v1 do
-      post "/games", to: "games#create"
-      resources :games, only: [:show] do
+      resources :games, only: [:show, :create] do
+        post "/ships", to: "games/ships#create"
         post "/shots", to: "games/shots#create"
+        post "/ships", to: "games/ships#update"
       end
     end
   end

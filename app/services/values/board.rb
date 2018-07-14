@@ -1,10 +1,12 @@
 class Board
-  attr_reader :length,
-              :board
+
+  attr_reader :length
+  attr_accessor :ships_not_placed, :board
 
   def initialize(length)
-    @length = length
-    @board = create_grid
+    @length           = length
+    @board            = create_grid
+    @ships_not_placed = [2, 3]
   end
 
   def get_row_letters
@@ -203,4 +205,3 @@ class Board
     get_column(coordinate) == "1"
   end
 end
-

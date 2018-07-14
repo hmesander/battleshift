@@ -3,7 +3,7 @@ class Ship
               :end_space
 
   def initialize(length)
-    @length = length
+    @length = length.to_i
     @damage = 0
     @start_space = nil
     @end_space = nil
