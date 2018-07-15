@@ -43,8 +43,7 @@ class TurnProcessor
     end
     @messages << "Your shot resulted in a #{result}."
     @status = 400 if result.include?('Invalid')
-    switch_turns if result.include?('Your shot resulted in a')
-    # game.player_1_turns += 1
+    switch_turns
   end
 
   def switch_turns
@@ -63,14 +62,5 @@ class TurnProcessor
   def ai_attack_back
     result = AiSpaceSelector.new(@player_1_board).fire!
     @messages << "The computer's shot resulted in a #{result}."
-    # game.player_2_turns += 1
   end
-
-  # def player
-  #   Player.new(game.player_1_board)
-  # end
-  #
-  # def opponent
-  #   Player.new(game.player_2_board)
-  # end
 end
