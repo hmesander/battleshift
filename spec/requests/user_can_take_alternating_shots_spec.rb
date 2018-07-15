@@ -6,8 +6,8 @@ describe 'POST /api/v1/games/:id/shots' do
       player_1 = create(:user, status: 'active')
       player_2 = create(:user, status: 'active', email_address: 'blub@email.com', token: 'efh387do8s72_nij3')
       game = create(:game, player_1_board: Board.new(4), player_2_board: Board.new(4))
-      UserGame.create(user_id: player_1.id, game_id: game.id)
-      UserGame.create(user_id: player_2.id, game_id: game.id)
+      game.user_games.create!(user_id: player_1.id)
+      game.user_games.create!(user_id: player_2.id)
 
       sm_ship = Ship.new(2)
       lg_ship = Ship.new(3)
@@ -58,8 +58,8 @@ describe 'POST /api/v1/games/:id/shots' do
 
       expect(response).to be_success
       expect(actual[:id]).to eq(expected.id)
-      expect(actual[:message]).to eq('Your shot resulted in a Hit')
-      expect(game[:player_2_board][:rows].first[:data].first[:status]).to eq('Hit')
+      expect(actual[:message]).to eq('Your shot resulted in a Hit.')
+      expect(game[:player_2_board].board.first[:data].first[:status]).to eq('Hit')
       expect(game[:winner]).to be_nil
 
       headers = { 'X-API-Key' => player_2.token, 'ACCEPT' => 'application/json' }
