@@ -10,7 +10,11 @@ class Space
   def attack!
     @status = if contents && not_attacked?
                 contents.attack!
-                "Hit"
+                if self.sunk?
+                  "Hit. Battleship sunk."
+                else
+                  "Hit"
+                end
               else
                 "Miss"
               end
@@ -26,5 +30,9 @@ class Space
 
   def not_attacked?
     status == "Not Attacked"
+  end
+
+  def sunk?
+    @contents && @contents.is_sunk?
   end
 end

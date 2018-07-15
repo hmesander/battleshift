@@ -5,6 +5,8 @@ module Api
         def create
           if wrong_turn?
             render status: 400, json: current_game, message: "Invalid move. It's your opponent's turn."
+          elsif wrong_coordinates?
+            render status: 400, json: current_game, message: "Invalid coordinates."
           else
             turn_processor = TurnProcessor.new(current_game, params[:target], current_player, player_1_board, player_2_board)
             turn_processor.run!
@@ -16,6 +18,10 @@ module Api
 
         def wrong_turn?
           current_game.current_turn != current_player.user_games.find_by(game_id: current_game.id).title
+        end
+
+        def wrong_coordinates?
+          player_1_board.space_names.exclude?(params[:target]) || player_2_board.space_names.exclude?(params[:target])
         end
       end
     end

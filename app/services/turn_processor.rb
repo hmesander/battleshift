@@ -42,7 +42,6 @@ class TurnProcessor
       @game.player_1_board = @player_1_board
     end
     @messages << "Your shot resulted in a #{result}."
-    @status = 400 if result.include?('Invalid')
     switch_turns
   end
 
