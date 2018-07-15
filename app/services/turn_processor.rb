@@ -1,18 +1,22 @@
 class TurnProcessor
-  def initialize(game, target, player, opponent, player_board, opponent_board)
+  def initialize(game, target, current_player, player_1_board, player_2_board)
     @game   = game
     @target = target
-    @player = player
-    @opponent = opponent
-    @player_board = player_board
-    @opponent_board = opponent_board
+    @current_player = current_player
+    @player_1_board = player_1_board
+    @player_2_board = player_2_board
     @messages = []
   end
 
   def run!
     begin
-      attack_opponent
-      # ai_attack_back
+      if @game.users.length == 2
+        attack_other_player
+      elsif @game.users.length == 1
+        attack_computer
+        ai_attack_back
+      end
+      # switch_turns
       game.save!
     rescue InvalidAttack => e
       @messages << e.message
@@ -27,24 +31,35 @@ class TurnProcessor
 
   attr_reader :game, :target
 
-  def attack_opponent
-    result = Shooter.fire!(board: opponent_board, target: target)
+  def attack_other_player
+    if @current_player == @game.users[0]
+      result = Shooter.new(board: @player_2_board, target: @target).fire!
+      @game.player_2_board = @player_2_board
+    else
+      result = Shooter.new(board: @player_1_board, target: @target).fire!
+      @game.player_1_board = @player_1_board
+    end
     @messages << "Your shot resulted in a #{result}."
-    game.player_1_turns += 1
+    # game.player_1_turns += 1
   end
 
-  # def ai_attack_back
-  #   result = AiSpaceSelector.new(player.board).fire!
-  #   @messages << "The computer's shot resulted in a #{result}."
-  #   game.player_2_turns += 1
+  def attack_computer
+    result = Shooter.new(board: @game.player_2_board, target: @target).fire!
+    @messages << "Your shot resulted in a #{result}."
+  end
+
+  def ai_attack_back
+    result = AiSpaceSelector.new(@player_1_board).fire!
+    @messages << "The computer's shot resulted in a #{result}."
+    # game.player_2_turns += 1
+  end
+
+  # def player
+  #   Player.new(game.player_1_board)
   # end
-
-  def player
-    Player.new(game.player_1_board)
-  end
-
-  def opponent
-    Player.new(game.player_2_board)
-  end
+  #
+  # def opponent
+  #   Player.new(game.player_2_board)
+  # end
 
 end
