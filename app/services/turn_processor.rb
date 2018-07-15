@@ -1,4 +1,6 @@
 class TurnProcessor
+  attr_reader :status
+
   def initialize(game, target, current_player, player_1_board, player_2_board)
     @game   = game
     @target = target
@@ -6,6 +8,7 @@ class TurnProcessor
     @player_1_board = player_1_board
     @player_2_board = player_2_board
     @messages = []
+    @status = 200
   end
 
   def run!
@@ -16,7 +19,6 @@ class TurnProcessor
         attack_computer
         ai_attack_back
       end
-      # switch_turns
       game.save!
     rescue InvalidAttack => e
       @messages << e.message
@@ -40,7 +42,17 @@ class TurnProcessor
       @game.player_1_board = @player_1_board
     end
     @messages << "Your shot resulted in a #{result}."
+    @status = 400 if result.include?('Invalid')
+    switch_turns if result.include?('Your shot resulted in a')
     # game.player_1_turns += 1
+  end
+
+  def switch_turns
+    if @game.current_turn == 'challenger'
+      @game.current_turn = 'computer'
+    else
+      @game.current_turn = 'challenger'
+    end
   end
 
   def attack_computer
@@ -61,5 +73,4 @@ class TurnProcessor
   # def opponent
   #   Player.new(game.player_2_board)
   # end
-
 end

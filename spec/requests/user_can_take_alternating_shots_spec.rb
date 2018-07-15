@@ -30,22 +30,6 @@ describe 'POST /api/v1/games/:id/shots' do
                      end_space: "C3").run
 
       game.save
-      # headers = { 'X-API-Key' => player_1.token, 'ACCEPT' => 'application/json' }
-      # body = { 'ship_size' => 3, 'start_space' => "A1", 'end_space' => "A3" }
-      #
-      # post "/api/v1/games/#{game.id}/ships", headers: headers, params: body
-      #
-      # headers = { 'X-API-Key' => player_1.token, 'ACCEPT' => 'application/json' }
-      # body = { 'ship_size' => 2, 'start_space' => "C1", 'end_space' => "D1" }
-      # post "/api/v1/games/#{game.id}/ships", headers: headers, params: body
-      #
-      # headers = { 'X-API-Key' => player_2.token, 'ACCEPT' => 'application/json' }
-      # body = { 'ship_size' => 3, 'start_space' => "A1", 'end_space' => "A3" }
-      # post "/api/v1/games/#{game.id}/ships", headers: headers, params: body
-      #
-      # headers = { 'X-API-Key' => player_2.token, 'ACCEPT' => 'application/json' }
-      # body = { 'ship_size' => 2, 'start_space' => "C1", 'end_space' => "D1" }
-      # post "/api/v1/games/#{game.id}/ships", headers: headers, params: body
 
       headers = { 'X-API-Key' => player_1.token, 'ACCEPT' => 'application/json' }
       body = { 'target' => 'A1' }
