@@ -11,11 +11,10 @@ module Api
             turn_processor = TurnProcessor.new(current_game, params[:target], current_player, player_1_board, player_2_board)
             turn_processor.run!
             if current_game.winner.nil?
-              binding.pry
               current_game.update(winner: current_player.email_address)
               render status: 200, json: current_game, winner: current_game.winner, message: "#{turn_processor.message} Game over."
             else
-              render status: 200, json: current_game, winner: current_game.winner, message: "Invalid move. Game over."
+              render status: 200, json: current_game, message: "Invalid move. Game over."
             end
           else
             turn_processor = TurnProcessor.new(current_game, params[:target], current_player, player_1_board, player_2_board)

@@ -290,7 +290,7 @@ describe 'POST /api/v1/games/:id/shots' do
 
       expect(response.status).to eq(200)
       expect(actual[:id]).to eq(expected.id)
-      expect(actual[:message]).to include("Invlid move. Game over.")
+      expect(actual[:message]).to include("Invalid move. Game over.")
     end
   end
 end

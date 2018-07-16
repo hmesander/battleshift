@@ -45,17 +45,15 @@ class TurnProcessor
       player_2_hit_count if result.include?("Hit")
     end
     @messages << "Your shot resulted in a #{result}."
-    switch_turns
+    switch_turns unless @game.winner
   end
 
   def player_1_hit_count
     @game.player_1_turns += 1
-    # switch_turns if @game.player_1_turns == 4
   end
 
   def player_2_hit_count
     @game.player_2_turns += 1
-    # switch_turns if @game.player_2_turns == 4
   end
 
   def switch_turns
