@@ -6,15 +6,7 @@ class Shooter
   end
 
   def fire!
-    if valid_shot?
-      space.attack!
-    else
-      raise InvalidAttack.new("Invalid coordinates.")
-    end
-  end
-
-  def self.fire!(board:, target:)
-    new(board: board, target: target).fire!
+    space.attack!
   end
 
   private

@@ -6,16 +6,21 @@ module Api
         player_2 = User.find_by(email_address: params[:opponent_email])
         board_1 = Board.new(4)
         board_2 = Board.new(4)
-        game = Game.create(
-                        player_1_board: board_1,
-                        player_2_board: board_2,
-                        player_1_hits: 0,
-                        player_2_hits: 0,
-                        current_turn:   0
-                      )
-        game.user_games.create!(user_id: player_1.id)
-        game.user_games.create!(user_id: player_2.id)
-        render json: game
+        if player_2.active?
+          game = Game.create(
+                          player_1_board: board_1,
+                          player_2_board: board_2,
+                          player_1_hits: 0,
+                          player_2_hits: 0,
+                          current_turn:   0
+                        )
+          game.user_games.create!(user_id: player_1.id)
+          game.user_games.create!(user_id: player_2.id)
+          render json: game
+        else
+          render json: { error: "Your opponent hasn't activated their account yet." }, status: 400
+        end
+
       end
 
       def show
