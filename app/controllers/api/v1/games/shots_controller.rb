@@ -2,7 +2,7 @@ module Api
   module V1
     module Games
       class ShotsController < ApiController
-        before_action :valid_player_check
+        before_action :player_check
 
         def create
           if wrong_turn?
@@ -47,15 +47,15 @@ module Api
           render status: turn_processor.status, json: current_game, message: turn_processor.message
         end
 
-        def valid_player_check
-          render status: 401 unless player_is_registered? && game_player?
+        def player_check
+          render status: 401 unless player_registered? && player_in_game?
         end
 
-        def player_is_registered?
+        def player_registered?
           User.find_by_token(request.headers['X-API-KEY'])
         end
 
-        def game_player?
+        def player_in_game?
           request.headers['X-API-KEY'] == current_game.users[0].token || request.headers['X-API-KEY'] == current_game.users[1].token
         end
       end
