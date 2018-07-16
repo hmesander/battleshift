@@ -10,18 +10,9 @@ module Api
           elsif wrong_coordinates?
             render status: 400, json: current_game, message: "Invalid coordinates."
           elsif game_over?
-            turn_processor = TurnProcessor.new(current_game, params[:target], current_player, player_1_board, player_2_board)
-            turn_processor.run!
-            if current_game.winner.nil?
-              current_game.update(winner: current_player.email_address)
-              render status: 200, json: current_game, winner: current_game.winner, message: "#{turn_processor.message} Game over."
-            else
-              render status: 200, json: current_game, message: "Invalid move. Game over."
-            end
+            end_game
           else
-            turn_processor = TurnProcessor.new(current_game, params[:target], current_player, player_1_board, player_2_board)
-            turn_processor.run!
-            render status: turn_processor.status, json: current_game, message: turn_processor.message
+            shoot!
           end
         end
 
@@ -37,6 +28,23 @@ module Api
 
         def game_over?
           current_game.player_1_turns >= 4 || current_game.player_2_turns >= 4
+        end
+
+        def end_game
+          turn_processor = TurnProcessor.new(current_game, params[:target], current_player, player_1_board, player_2_board)
+          turn_processor.run!
+          if current_game.winner.nil?
+            current_game.update(winner: current_player.email_address)
+            render status: 200, json: current_game, winner: current_game.winner, message: "#{turn_processor.message} Game over."
+          else
+            render status: 200, json: current_game, message: "Invalid move. Game over."
+          end
+        end
+
+        def shoot!
+          turn_processor = TurnProcessor.new(current_game, params[:target], current_player, player_1_board, player_2_board)
+          turn_processor.run!
+          render status: turn_processor.status, json: current_game, message: turn_processor.message
         end
 
         def valid_player_check
