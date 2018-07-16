@@ -16,6 +16,9 @@
 require 'byebug'
 require 'rails_helper'
 require 'database_cleaner'
+require 'simplecov'
+
+SimpleCov.start
 
 RSpec.configure do |config|
 

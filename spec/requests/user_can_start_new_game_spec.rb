@@ -1,5 +1,5 @@
 describe 'POST /api/v1/games' do
-  describe 'registered user initiates new game' do
+  describe 'registered user initiates new game with two active players' do
     it 'returns a game with boards and the correct opponent' do
       player_1 = create(:user, status: 'active')
       player_2 = create(:user, status: 'active', email_address: 'blub@email.com', token: 'efh387do8s72_nij3')
@@ -34,6 +34,23 @@ describe 'POST /api/v1/games' do
       expect(actual[:player_1_board][:rows][3][:data][0][:coordinates]).to eq("D1")
       expect(actual[:player_1_board][:rows][3][:data][0][:coordinates]).to eq("D1")
       expect(actual[:player_1_board][:rows][3][:data][0][:status]).to eq("Not Attacked")
+    end
+  end
+
+  describe 'registered user initiates new game with only one active player' do
+    it 'returns a 400 status' do
+      player_1 = create(:user, status: 'active')
+      player_2 = create(:user, email_address: 'blub@email.com', token: 'efh387do8s72_nij3')
+
+      headers = { 'X-API-Key' => player_1.token, 'ACCEPT' => 'application/json' }
+
+      post "/api/v1/games?opponent_email=#{player_2.email_address}", headers: headers
+
+      actual = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).to have_http_status(400)
+
+      expect(actual[:error]).to eq("Your opponent hasn't activated their account yet.")
     end
   end
 end
