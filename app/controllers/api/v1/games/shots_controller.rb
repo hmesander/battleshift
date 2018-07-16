@@ -44,6 +44,10 @@ module Api
         def player_in_game?
           request.headers['X-API-KEY'] == current_game.users[0].token || request.headers['X-API-KEY'] == current_game.users[1].token
         end
+
+        def game_over?
+          current_game.player_1_hits >= 4 || current_game.player_2_hits >= 4
+        end
       end
     end
   end

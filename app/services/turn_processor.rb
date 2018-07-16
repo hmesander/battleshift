@@ -48,11 +48,11 @@ class TurnProcessor
   end
 
   def player_1_hit_count
-    @game.player_1_turns += 1
+    @game.player_1_hits += 1
   end
 
   def player_2_hit_count
-    @game.player_2_turns += 1
+    @game.player_2_hits += 1
   end
 
   def switch_turns
