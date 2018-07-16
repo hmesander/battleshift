@@ -173,6 +173,7 @@ class Board
   def neighbors?(coordinate1, coordinate2)
     neighbors(coordinate1).include?(coordinate2)
   end
+
   def contains?(coordinate)
     create_space_names.include?(coordinate)
   end

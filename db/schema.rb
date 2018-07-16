@@ -1,11 +1,24 @@
-ActiveRecord::Schema.define(version: 20180712025159) do
+# This file is auto-generated from the current state of the database. Instead
+# of editing this file, please use the migrations feature of Active Record to
+# incrementally modify your database, and then regenerate this schema definition.
+#
+# Note that this schema.rb definition is the authoritative source for your
+# database schema. If you need to create the application database on another
+# system, you should be using db:schema:load, not running all the migrations
+# from scratch. The latter is a flawed and unsustainable approach (the more migrations
+# you'll amass, the slower it'll run and the greater likelihood for issues).
+#
+# It's strongly recommended that you check this file into your version control system.
 
+ActiveRecord::Schema.define(version: 20180716001730) do
+
+  # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "games", force: :cascade do |t|
     t.text "player_1_board"
     t.text "player_2_board"
-    t.integer "winner"
+    t.string "winner"
     t.integer "player_1_turns"
     t.integer "player_2_turns"
     t.integer "current_turn"
@@ -16,6 +29,7 @@ ActiveRecord::Schema.define(version: 20180712025159) do
   create_table "user_games", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "game_id"
+    t.string "title"
     t.index ["game_id"], name: "index_user_games_on_game_id"
     t.index ["user_id"], name: "index_user_games_on_user_id"
   end
