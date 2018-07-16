@@ -9,8 +9,8 @@ module Api
         game = Game.create(
                         player_1_board: board_1,
                         player_2_board: board_2,
-                        player_1_turns: 0,
-                        player_2_turns: 0,
+                        player_1_hits: 0,
+                        player_2_hits: 0,
                         current_turn:   0
                       )
         game.user_games.create!(user_id: player_1.id)

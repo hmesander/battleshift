@@ -27,7 +27,7 @@ module Api
         end
 
         def game_over?
-          current_game.player_1_turns >= 4 || current_game.player_2_turns >= 4
+          current_game.player_1_hits >= 4 || current_game.player_2_hits >= 4
         end
 
         def end_game
