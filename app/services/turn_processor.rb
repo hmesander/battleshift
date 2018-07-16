@@ -9,7 +9,6 @@ class TurnProcessor
     @player_2_board = player_2_board
     @messages = []
     @status = 200
-
   end
 
   def run!
