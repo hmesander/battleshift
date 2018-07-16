@@ -9,6 +9,7 @@ class TurnProcessor
     @player_2_board = player_2_board
     @messages = []
     @status = 200
+
   end
 
   def run!
@@ -37,12 +38,24 @@ class TurnProcessor
     if @current_player == @game.users[0]
       result = Shooter.new(board: @player_2_board, target: @target).fire!
       @game.player_2_board = @player_2_board
+      player_1_hit_count if result.include?("Hit")
     else
       result = Shooter.new(board: @player_1_board, target: @target).fire!
       @game.player_1_board = @player_1_board
+      player_2_hit_count if result.include?("Hit")
     end
     @messages << "Your shot resulted in a #{result}."
     switch_turns
+  end
+
+  def player_1_hit_count
+    @game.player_1_turns += 1
+    # switch_turns if @game.player_1_turns == 4
+  end
+
+  def player_2_hit_count
+    @game.player_2_turns += 1
+    # switch_turns if @game.player_2_turns == 4
   end
 
   def switch_turns

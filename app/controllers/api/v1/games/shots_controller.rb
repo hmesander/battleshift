@@ -7,6 +7,16 @@ module Api
             render status: 400, json: current_game, message: "Invalid move. It's your opponent's turn."
           elsif wrong_coordinates?
             render status: 400, json: current_game, message: "Invalid coordinates."
+          elsif game_over?
+            turn_processor = TurnProcessor.new(current_game, params[:target], current_player, player_1_board, player_2_board)
+            turn_processor.run!
+            if current_game.winner.nil?
+              binding.pry
+              current_game.update(winner: current_player.email_address)
+              render status: 200, json: current_game, winner: current_game.winner, message: "#{turn_processor.message} Game over."
+            else
+              render status: 200, json: current_game, winner: current_game.winner, message: "Invalid move. Game over."
+            end
           else
             turn_processor = TurnProcessor.new(current_game, params[:target], current_player, player_1_board, player_2_board)
             turn_processor.run!
@@ -22,6 +32,10 @@ module Api
 
         def wrong_coordinates?
           player_1_board.space_names.exclude?(params[:target]) || player_2_board.space_names.exclude?(params[:target])
+        end
+
+        def game_over?
+          current_game.player_1_turns >= 4 || current_game.player_2_turns >= 4
         end
       end
     end

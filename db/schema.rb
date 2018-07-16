@@ -10,22 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180715212133) do
+ActiveRecord::Schema.define(version: 20180716001730) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "boards", force: :cascade do |t|
-    t.integer "length"
-    t.string "ships_not_placed", default: "23"
-    t.bigint "user_game_id"
-    t.index ["user_game_id"], name: "index_boards_on_user_game_id"
-  end
-
   create_table "games", force: :cascade do |t|
     t.text "player_1_board"
     t.text "player_2_board"
-    t.integer "winner"
+    t.string "winner"
     t.integer "player_1_turns"
     t.integer "player_2_turns"
     t.integer "current_turn"
@@ -51,7 +44,6 @@ ActiveRecord::Schema.define(version: 20180715212133) do
     t.string "token"
   end
 
-  add_foreign_key "boards", "user_games"
   add_foreign_key "user_games", "games"
   add_foreign_key "user_games", "users"
 end

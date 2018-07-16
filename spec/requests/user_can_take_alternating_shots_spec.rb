@@ -206,4 +206,91 @@ describe 'POST /api/v1/games/:id/shots' do
       expect(actual[:message]).to include("Your shot resulted in a Hit. Battleship sunk.")
     end
   end
+
+  describe 'registered user wins a game' do
+    it 'returned message includes Game over and winner email' do
+      player_1 = create(:user, status: 'active')
+      player_2 = create(:user, status: 'active', email_address: 'blub@email.com', token: 'efh387do8s72_nij3')
+      game = create(:game, player_1_board: Board.new(4), player_2_board: Board.new(4))
+      game.user_games.create!(user_id: player_1.id)
+      game.user_games.create!(user_id: player_2.id)
+
+      sm_ship = Ship.new(2)
+      lg_ship = Ship.new(3)
+
+      ShipPlacer.new(board: game.player_1_board,
+                     ship: sm_ship,
+                     start_space: "A1",
+                     end_space: "A2").run
+      ShipPlacer.new(board: game.player_1_board,
+                     ship: lg_ship,
+                     start_space: "C1",
+                     end_space: "C3").run
+      ShipPlacer.new(board: game.player_2_board,
+                     ship: sm_ship,
+                     start_space: "A1",
+                     end_space: "A2").run
+      ShipPlacer.new(board: game.player_2_board,
+                     ship: lg_ship,
+                     start_space: "C1",
+                     end_space: "C3").run
+
+      game.save
+
+      headers = { 'X-API-Key' => player_1.token, 'ACCEPT' => 'application/json' }
+      body = { 'target' => 'A1' }
+      post "/api/v1/games/#{game.id}/shots", headers: headers, params: body
+
+      headers = { 'X-API-Key' => player_2.token, 'ACCEPT' => 'application/json' }
+      body = { 'target' => 'C1' }
+      post "/api/v1/games/#{game.id}/shots", headers: headers, params: body
+
+      headers = { 'X-API-Key' => player_1.token, 'ACCEPT' => 'application/json' }
+      body = { 'target' => 'A2' }
+      post "/api/v1/games/#{game.id}/shots", headers: headers, params: body
+
+      headers = { 'X-API-Key' => player_2.token, 'ACCEPT' => 'application/json' }
+      body = { 'target' => 'D3' }
+      post "/api/v1/games/#{game.id}/shots", headers: headers, params: body
+
+      headers = { 'X-API-Key' => player_1.token, 'ACCEPT' => 'application/json' }
+      body = { 'target' => 'C1' }
+      post "/api/v1/games/#{game.id}/shots", headers: headers, params: body
+
+      headers = { 'X-API-Key' => player_2.token, 'ACCEPT' => 'application/json' }
+      body = { 'target' => 'D3' }
+      post "/api/v1/games/#{game.id}/shots", headers: headers, params: body
+
+      headers = { 'X-API-Key' => player_1.token, 'ACCEPT' => 'application/json' }
+      body = { 'target' => 'C2' }
+      post "/api/v1/games/#{game.id}/shots", headers: headers, params: body
+
+      headers = { 'X-API-Key' => player_2.token, 'ACCEPT' => 'application/json' }
+      body = { 'target' => 'D3' }
+      post "/api/v1/games/#{game.id}/shots", headers: headers, params: body
+
+      headers = { 'X-API-Key' => player_1.token, 'ACCEPT' => 'application/json' }
+      body = { 'target' => 'C3' }
+      post "/api/v1/games/#{game.id}/shots", headers: headers, params: body
+
+      actual = JSON.parse(response.body, symbolize_names: true)
+      expected = Game.last
+
+      expect(response.status).to eq(200)
+      expect(actual[:id]).to eq(expected.id)
+      expect(actual[:message]).to include("Your shot resulted in a Hit. Battleship sunk. Game over")
+      expect(actual[:winner]).to include(player_1.email_address)
+
+      headers = { 'X-API-Key' => player_2.token, 'ACCEPT' => 'application/json' }
+      body = { 'target' => 'D2' }
+      post "/api/v1/games/#{game.id}/shots", headers: headers, params: body
+
+      actual = JSON.parse(response.body, symbolize_names: true)
+      expected = Game.last
+
+      expect(response.status).to eq(200)
+      expect(actual[:id]).to eq(expected.id)
+      expect(actual[:message]).to include("Invlid move. Game over.")
+    end
+  end
 end
