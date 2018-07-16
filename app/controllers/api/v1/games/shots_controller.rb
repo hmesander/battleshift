@@ -2,6 +2,8 @@ module Api
   module V1
     module Games
       class ShotsController < ApiController
+        before_action :valid_player_check
+
         def create
           if wrong_turn?
             render status: 400, json: current_game, message: "Invalid move. It's your opponent's turn."
@@ -35,6 +37,18 @@ module Api
 
         def game_over?
           current_game.player_1_turns >= 4 || current_game.player_2_turns >= 4
+        end
+
+        def valid_player_check
+          render status: 401 unless player_is_registered? && game_player?
+        end
+
+        def player_is_registered?
+          User.find_by_token(request.headers['X-API-KEY'])
+        end
+
+        def game_player?
+          request.headers['X-API-KEY'] == current_game.users[0].token || request.headers['X-API-KEY'] == current_game.users[1].token
         end
       end
     end
